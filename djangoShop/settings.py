@@ -9,12 +9,15 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
-
+import datetime
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+# 需要引入自己的 app
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
@@ -24,7 +27,7 @@ SECRET_KEY = '3*t8&(_cjzf2u9d=dek_^v-gcj3s589j8=)v1#vz1c_t$up^&3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'shop.raoul1996.cn']
+ALLOWED_HOSTS = ['*']
 
 # 重载为了使我们的 UserProfile 生效
 AUTH_USER_MODEL = 'users.UserProfile'

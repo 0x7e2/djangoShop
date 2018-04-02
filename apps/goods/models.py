@@ -17,8 +17,9 @@ class GoodsCategory(models.Model):
     name = models.CharField(default="", max_length=30, verbose_name="类别名称", help_text="类别名称")
     code = models.CharField(default="", max_length=30, verbose_name="类别code", help_text="了；类别code")
     desc = models.TextField(default="", verbose_name="类别描述", help_text="类别描述")
-    category_type = models.CharField(choices=CATEGORY_TYPE, verbose_name="类目级别")
-    parent_category = models.ForeignKey('self', null=True, blank=True, verbose_name="父类别", related_name="sub_cat")
+    category_type = models.CharField(max_length=100,choices=CATEGORY_TYPE, verbose_name="类目级别")
+    parent_category = models.ForeignKey('self', null=True, blank=True, verbose_name="父类别", related_name="sub_cat",
+                                        on_delete=models.CASCADE)
     is_tab = models.BooleanField(default=False, verbose_name="是否导航", help_text="是否导航")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
@@ -34,7 +35,8 @@ class GoodsCategoryBrand(models.Model):
     """
     品牌名称
     """
-    category = models.ForeignKey(GoodsCategory, related_name="brands", null=True, blank=True, verbose_name="商品类目")
+    category = models.ForeignKey(GoodsCategory, related_name="brands", null=True, blank=True, verbose_name="商品类目",
+                                 on_delete=models.CASCADE)
     name = models.CharField(default="", max_length=30, verbose_name="品牌名称", help_text="品牌名称")
     desc = models.CharField(default="", max_length=200, verbose_name="品牌描述", help_text="品牌描述")
     image = models.ImageField(max_length=200, upload_to="brand/")
@@ -53,7 +55,7 @@ class Goods(models.Model):
     """
     商品
     """
-    category = models.ForeignKey(GoodsCategory, verbose_name="商品类目")
+    category = models.ForeignKey(GoodsCategory, verbose_name="商品类目", on_delete=models.CASCADE)
     goods_sn = models.CharField(max_length=50, default="", verbose_name="商品唯一货号")
     name = models.CharField(max_length=100, verbose_name="商品名称")
     click_num = models.IntegerField(default=0, verbose_name="点击数")
@@ -82,7 +84,7 @@ class GoodsImage(models.Model):
     """
     商品轮播图
     """
-    goods = models.ForeignKey(Goods, verbose_name="商品", related_name="images")
+    goods = models.ForeignKey(Goods, verbose_name="商品", related_name="images", on_delete=models.CASCADE)
     image = models.ImageField(upload_to="", verbose_name="图片", null=True, blank=True)
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
@@ -98,7 +100,7 @@ class Banner(models.Model):
     """
     轮播的商品
     """
-    goods = models.ForeignKey(Goods, verbose_name="商品")
+    goods = models.ForeignKey(Goods, verbose_name="商品", on_delete=models.CASCADE)
     image = models.ImageField(upload_to="banner", verbose_name="轮播图")
     index = models.IntegerField(default=0, verbose_name="轮播顺序")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
